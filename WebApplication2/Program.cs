@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
+using WebApplication2.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(
     new MySqlServerVersion(new Version(8,0,41))
     )
 );
+
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new EmployeeProfile());
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
+
 
 var app = builder.Build();
 
